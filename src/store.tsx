@@ -1,16 +1,18 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import { hogeReducer, HogeState } from './reducers/hogeState';
+import { Action, createStore, Store } from 'redux';
 
-export type AppState = {
-    hoge: HogeState
-};
+import reducer from './reducer';
 
-const store = createStore(
-    combineReducers<AppState>({
-        hoge: hogeReducer,
-    }),
-    applyMiddleware(thunkMiddleware),
-);
+// Storeが持つTodoにの状態を定義
+export interface ITodoState {
+    todos: string[];
+}
+
+// 全てのStateを集約したStateを定義
+export interface IRootState {
+    todoState: ITodoState;
+}
+
+// importしたreducerを渡してstoreを作成
+const store: Store<ITodoState, Action> = createStore(reducer);
 
 export default store;

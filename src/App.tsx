@@ -1,10 +1,14 @@
 import * as React from 'react';
-import HogeContainer from './containers/hogeContainer';
+import { Provider } from 'react-redux';
+import MemoContainer from './MemoContainer';
+import store from './store';
 
+/* tslint:disable:no-console */
+/* tslint:disable:jsx-no-lambda */
 const App: React.FC = () => (
-    <div className="App">
-        <HogeContainer />
-    </div>
+    <Provider store={store}>
+        <MemoContainer />
+    </Provider>
 );
 
 export default App;
