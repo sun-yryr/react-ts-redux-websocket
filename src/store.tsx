@@ -1,4 +1,10 @@
-import { Action, createStore, Store } from 'redux';
+import {
+    Action,
+    createStore,
+    Store,
+    applyMiddleware,
+} from 'redux';
+import { middleware } from './websocket';
 
 import reducer from './reducer';
 
@@ -6,13 +12,20 @@ import reducer from './reducer';
 export interface ITodoState {
     todos: string[];
 }
+export interface IWebsocketState {
+    message: string;
+}
 
 // 全てのStateを集約したStateを定義
 export interface IRootState {
     todoState: ITodoState;
+    websocketState: IWebsocketState;
 }
 
 // importしたreducerを渡してstoreを作成
-const store: Store<ITodoState, Action> = createStore(reducer);
+const store: Store = createStore(
+    reducer,
+    applyMiddleware(middleware),
+);
 
 export default store;

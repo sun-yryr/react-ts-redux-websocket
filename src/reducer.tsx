@@ -1,7 +1,8 @@
 import { combineReducers, Reducer } from 'redux';
 
 import { IAddTodoAction, TodoAction, TodoActionType } from './action';
-import { IRootState, ITodoState } from './store';
+import { IRootState, ITodoState, IWebsocketState } from './store';
+import { IWebsocketMessageAction, WebsocketAction, WebsocketType } from './websocket';
 
 // ITodoStateの初期データを作成
 const initTodoState: ITodoState = {
@@ -29,9 +30,35 @@ const todoReducer: Reducer<ITodoState, TodoAction> = (
     }
 };
 
+const websocketReducer: Reducer<IWebsocketState, WebsocketAction> = (
+    state: IWebsocketState = { message: 'init' },
+    action: WebsocketAction,
+): IWebsocketState => {
+    switch (action.type) {
+        case WebsocketType.OPEN: {
+            console.log('Websocket open');
+            break;
+        }
+        case WebsocketType.CLOSE: {
+            console.log('Websocket close');
+            break;
+        }
+        case WebsocketType.MESSAGE: {
+            console.log('Websocket message');
+            const messageAction: IWebsocketMessageAction = action;
+            console.log(messageAction.payload.event.data);
+            break;
+        }
+        default:
+            break;
+    }
+    return state;
+};
+
 // 全てを集約したReducerを作成
 const reducer: Reducer<IRootState> = combineReducers({
     todoState: todoReducer,
+    websocketState: websocketReducer,
 });
 
 export default reducer;
