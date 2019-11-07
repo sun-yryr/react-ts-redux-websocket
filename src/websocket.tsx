@@ -1,4 +1,5 @@
 import { Action } from 'redux';
+import { todoActionCreator } from './action';
 
 export enum WebsocketType {
     CONNECT = 'WEBSOCKET:CONNECT',
@@ -31,7 +32,7 @@ interface IWebsocketCloseAction extends Action {
 }
 export interface IWebsocketMessageAction extends Action {
     type: WebsocketType.MESSAGE;
-    payload: { event: MessageEvent };
+    payload: MessageEvent;
 }
 
 export type WebsocketAction =
@@ -53,7 +54,7 @@ export const middleware = ({ dispatch }: { dispatch: any }) => (next: any) => (a
             // Attach the callbacks
             websocket.onopen = () => dispatch({ type: 'WEBSOCKET:OPEN' });
             websocket.onclose = (event) => dispatch({ type: 'WEBSOCKET:CLOSE', payload: event });
-            websocket.onmessage = (event) => dispatch({ type: 'WEBSOCKET:MESSAGE', payload: event });
+            websocket.onmessage = (event) => dispatch(todoActionCreator.addTodoAction(event.data));
 
             break;
 

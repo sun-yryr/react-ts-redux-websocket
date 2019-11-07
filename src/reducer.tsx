@@ -1,7 +1,7 @@
 import { combineReducers, Reducer } from 'redux';
 
-import { IAddTodoAction, TodoAction, TodoActionType } from './action';
-import { IRootState, ITodoState, IWebsocketState } from './store';
+import { IAddTodoAction, TodoAction, TodoActionType, todoActionCreator } from './action';
+import store, { IRootState, ITodoState, IWebsocketState } from './store';
 import { IWebsocketMessageAction, WebsocketAction, WebsocketType } from './websocket';
 
 // ITodoStateの初期データを作成
@@ -46,7 +46,8 @@ const websocketReducer: Reducer<IWebsocketState, WebsocketAction> = (
         case WebsocketType.MESSAGE: {
             console.log('Websocket message');
             const messageAction: IWebsocketMessageAction = action;
-            console.log(messageAction.payload.event.data);
+            console.log(messageAction.payload.data);
+            store.dispatch(todoActionCreator.addTodoAction(messageAction.payload.data));
             break;
         }
         default:
