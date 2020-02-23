@@ -21,7 +21,7 @@ interface IState {
 }
 
 const Root = styled.div`
-    width: 500px
+    width: 100%
     margin: 0 auto
     background-color: #f3f3f3
 `;
