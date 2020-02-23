@@ -1,5 +1,6 @@
 import { Action } from 'redux';
 import { todoActionCreator } from './action';
+import { CalendarEvent } from './types';
 
 export enum WebsocketType {
     CONNECT = 'WEBSOCKET:CONNECT',
@@ -18,7 +19,7 @@ interface IWebsocketConnectAction extends Action {
 }
 interface IWebsocketSendAction extends Action {
     type: WebsocketType.SEND;
-    payload: Object;
+    payload: any;
 }
 interface IWebsocketDisconnectAction extends Action {
     type: WebsocketType.DISCONNECT;
@@ -75,14 +76,15 @@ export const middleware = ({ dispatch }: { dispatch: any }) => (next: any) => (a
 };
 
 export interface IWebsocketActionCreater {
-    sendMessageAction(message: string): IWebsocketSendAction
+    sendMessageAction(event: CalendarEvent): IWebsocketSendAction
 }
 
 class WebsocketActionCreater implements IWebsocketActionCreater {
-    public sendMessageAction = (message: string): IWebsocketSendAction => ({
+    public sendMessageAction = (event: CalendarEvent): IWebsocketSendAction => ({
         type: WebsocketType.SEND,
         payload: {
-            message,
+            EventName: 'add_schedule',
+            payload: event,
         },
     });
 }

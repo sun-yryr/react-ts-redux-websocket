@@ -6,6 +6,7 @@ import { todoActionCreator } from './action';
 import store, { IRootState } from './store';
 import Memo from './Memo';
 import { WebsocketType, WebsocketAction, websocketActionCreater } from './websocket';
+import { CalendarEvent } from './types';
 
 // ReduxのStoreをReactのContainerのPropsに変換するinterfaceを定義
 interface IStateToProps {
@@ -15,8 +16,7 @@ interface IStateToProps {
 // ReduxのDispatchをPropsに変換するinterfaceを定義
 // メンバにはどのアクションを実行するのかを定義する
 interface IDispatchToProps {
-    addTodo: (todo: string) => void;
-    sendMessage: (message: string) => void;
+    sendMessage: (event: CalendarEvent) => void;
 }
 
 // IStateToPropsとIDispatchToPropsの複合型を定義
@@ -27,7 +27,7 @@ type IProps = IStateToProps & IDispatchToProps;
 /* tslint:disable:jsx-no-lambda */
 class MemoContainer extends React.Component<IProps, {}> {
     componentDidMount() {
-        const action = (url = 'ws://localhost:8080') => ({
+        const action = (url = 'ws://agile-river-42294.herokuapp.com') => ({
             type: WebsocketType.CONNECT,
             payload: { url },
         });
@@ -35,10 +35,9 @@ class MemoContainer extends React.Component<IProps, {}> {
     }
 
     // TodoComponentにわたすコールバック関数
-    private onClickAddButton = (todo: string): void => {
-        const { addTodo, sendMessage } = this.props;
-        addTodo(todo);
-        sendMessage(todo);
+    private onClickAddButton = (event: CalendarEvent): void => {
+        const { sendMessage } = this.props;
+        sendMessage(event);
     };
 
     render(): JSX.Element {
@@ -63,8 +62,7 @@ const mapStateToProps = (state: IRootState): IStateToProps => {
 // initwebsocket達を使うためには，action.typeを宣言しないといけない。
 // ↑これは，reduxでwebsocketの状態を管理しないといけないということ？
 const mapDispatchToProps = (dispatch: Dispatch<Action>): IDispatchToProps => ({
-    addTodo: (todo: string) => dispatch(todoActionCreator.addTodoAction(todo)),
-    sendMessage: (message: string) => dispatch(websocketActionCreater.sendMessageAction(message)),
+    sendMessage: (event: CalendarEvent) => dispatch(websocketActionCreater.sendMessageAction(event)),
 });
 
 // Storeが更新されたときの挙動が詰められたIStatePropsと、
